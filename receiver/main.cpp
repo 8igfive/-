@@ -3,6 +3,7 @@
 #include "receiver.h"
 #include "rsa.h"
 #include <ctime>
+#include "../aes/AES.h"
 int main()
 {
     //get socket
@@ -84,13 +85,15 @@ int main()
     unsigned char data_after_decrypt[16];
     unsigned char aesSeed[32];
     strncpy((char*)aesSeed,(const char*)seed,32);
-    AES_KEY AESDecryptKey;
-    AES_set_decrypt_key(aesSeed, 256, &AESDecryptKey);
+    AES aes(aesSeed, 32);
+    // AES_KEY AESDecryptKey;
+    // AES_set_decrypt_key(aesSeed, 256, &AESDecryptKey);
     while(1){
         //receive data
         printf("Wainting For File...\n");
         memset(data_after_encrypt,0,sizeof(data_after_encrypt));
-        recvFile(data_after_encrypt,data_after_decrypt,&AESDecryptKey,sock);
+        myRecvFile(data_after_encrypt,data_after_decrypt,aes,sock);
+        //recvFile(data_after_encrypt,data_after_decrypt,&AESDecryptKey,sock);
     }
     //RSA_free(EncryptRsa);
     close(sock);

@@ -143,4 +143,42 @@ int sendFile(FILE* fp,unsigned long fsize,unsigned char *path,unsigned char *dat
     return 0;
 }
 
-
+int mySendFile(FILE* fp,unsigned long fsize,unsigned char *path,unsigned char *data_to_encrypt,unsigned char *data_after_encrypt, AES& aes, int clnt_sock){
+    //send file size
+    unsigned long times=((unsigned long)(fsize/16))+1;
+    printf("File size:%lu bytes\n",fsize);
+    char* fs=(char*)&fsize;
+    char p_fs[16];//padding to 16bytes
+    memset(p_fs,0,sizeof(p_fs));
+    strncpy(p_fs,(const char*)fs,sizeof(fs));
+    char e_fs[16];
+    aes.encrypt((unsigned char*)p_fs, (unsigned char*)e_fs)
+    // AES_encrypt((unsigned char*)p_fs, (unsigned char*)e_fs, AESEncryptKey);
+    sendData((unsigned char*)e_fs,sizeof(e_fs),clnt_sock);
+    //send file name
+    const char ch='/';
+    const char *ret;
+    ret=strrchr((const char*)path,ch);
+    char fn[256];
+    memset(fn,0,sizeof(fn));
+    if(ret!=NULL){
+        strcpy(fn,(const char*)ret+1);
+    }else{
+        strcpy(fn,(const char*)path);
+    }
+    printf("File name:%s\n",fn);
+    char e_fn[256];
+    aes.encrypt((unsigned char*)fn, (unsigned char*)e_fn);
+    // AES_encrypt((unsigned char*)fn, (unsigned char*)e_fn, AESEncryptKey);
+    sendData((unsigned char*)e_fn,sizeof(e_fn),clnt_sock);
+    //send data
+    printf("Sending File...\n");
+    for(unsigned long i=0;i<times;i++){
+        fread(data_to_encrypt,16,1,fp);
+        aes.encrypt(data_to_encrypt, data_after_encrypt);
+        // AES_encrypt(data_to_encrypt, data_after_encrypt, AESEncryptKey);
+        sendData(data_after_encrypt,16,clnt_sock);
+    }
+    printf("Completes!\n");
+    return 0;
+}
