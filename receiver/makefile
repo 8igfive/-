@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -lssl -lcrypto -lgmp
+CFLAGS = -lssl -lcrypto -lgmp -std=c++11
 
 AES_DIR = ../aes
 AES_SRC = $(wildcard $(AES_DIR)/*.cpp)
