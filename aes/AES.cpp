@@ -54,7 +54,7 @@ void AES::decrypt(uint8_t* in, uint8_t* out)
 	uint8_t* temp = new uint8_t[4 * blockWordNumber];
 	for (uint8_t i = 0; i < 4; ++i)
 	{
-		for (uint8_t w = 0; w < cipherWordNumber; ++w)
+		for (uint8_t w = 0; w < blockWordNumber; ++w)
 		{
 			temp[blockWordNumber * i + w] = in[blockWordNumber * i + w];
 		}

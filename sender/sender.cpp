@@ -152,7 +152,7 @@ int mySendFile(FILE* fp,unsigned long fsize,unsigned char *path,unsigned char *d
     memset(p_fs,0,sizeof(p_fs));
     strncpy(p_fs,(const char*)fs,sizeof(fs));
     char e_fs[16];
-    aes.encrypt((unsigned char*)p_fs, (unsigned char*)e_fs)
+    aes.encrypt((unsigned char*)p_fs, (unsigned char*)e_fs);
     // AES_encrypt((unsigned char*)p_fs, (unsigned char*)e_fs, AESEncryptKey);
     sendData((unsigned char*)e_fs,sizeof(e_fs),clnt_sock);
     //send file name
