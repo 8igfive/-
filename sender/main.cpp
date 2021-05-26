@@ -2,9 +2,21 @@
 #include "rsa.h"
 #include <gmp.h>
 #include "../aes/AES.h"
+#include <string>
+#include <iostream>
+using namespace std;
 
-int main(){
-    int serv_sock=getServerSocket("192.168.31.128",8000);
+int main(int argc,char* argv[]){
+	//argv[0]:ip  argv[1]:port  argv[2]:filepath
+	if(argc!=4){
+		cout<<"argc:"<<argc<<endl;
+		return -1;
+	}
+	char* ipAddr = argv[1];
+	int portNum = atoi(argv[2]);
+	char* filePath = argv[3];
+	cout<<"ipAddr:"<<ipAddr<<",portNum:"<<portNum<<",filePath:"<<filePath<<endl;
+    int serv_sock=getServerSocket(ipAddr,portNum);
     printf("Sender socket ready.\n");
     printf("Waiting for connection...\n");
     int clnt_sock=waitForConnection(serv_sock);
@@ -80,26 +92,40 @@ int main(){
     unsigned char data_after_encrypt[16];
     unsigned char *dae;
     unsigned long fsize;
-    while(1){
-        memset(path,0,sizeof(path));
-        printf("Please input path of the file you wanna send:\n");
-        scanf("%s",path);
-        FILE* fp;
-        while((fp=fopen((const char*)path,"rb"))==NULL){
-            memset(path,0,sizeof(path));
-            printf("File error!\n");
-            printf("Please input path of the file you wanna send:\n");
-            scanf("%s",path);
-        }
-        printf("File opening...\n");
-        fseek(fp,SEEK_SET,SEEK_END);
-        fsize=ftell(fp);
-        fseek(fp,0,SEEK_SET);
-        memset(data_to_encrypt,0,sizeof(data_to_encrypt));
-        mySendFile(fp,fsize,path,data_to_encrypt,data_after_encrypt,aes,clnt_sock);
-        // sendFile(fp,fsize,path,data_to_encrypt,data_after_encrypt,&AESEncryptKey,clnt_sock);
-        fclose(fp);
+	
+    //while(1){
+    //    memset(path,0,sizeof(path));
+    //    printf("Please input path of the file you wanna send:\n");
+    //    scanf("%s",path);
+    //    FILE* fp;
+    //    while((fp=fopen((const char*)path,"rb"))==NULL){
+    //        memset(path,0,sizeof(path));
+    //        printf("File error!\n");
+    //        printf("Please input path of the file you wanna send:\n");
+    //        scanf("%s",path);
+    //    }
+    //    printf("File opening...\n");
+    //    fseek(fp,SEEK_SET,SEEK_END);
+    //    fsize=ftell(fp);
+    //    fseek(fp,0,SEEK_SET);
+    //    memset(data_to_encrypt,0,sizeof(data_to_encrypt));
+    //    mySendFile(fp,fsize,path,data_to_encrypt,data_after_encrypt,aes,clnt_sock);
+    //    // sendFile(fp,fsize,path,data_to_encrypt,data_after_encrypt,&AESEncryptKey,clnt_sock);
+    //    fclose(fp);
+    //}
+    FILE* fp;
+    if((fp=fopen((const char*)filePath,"rb"))==NULL){
+        printf("File error!\n");
+		return -1;
     }
+    printf("File opening...\n");
+    fseek(fp,SEEK_SET,SEEK_END);
+    fsize=ftell(fp);
+    fseek(fp,0,SEEK_SET);
+	memset(data_to_encrypt,0,sizeof(data_to_encrypt));
+    mySendFile(fp,fsize,(unsigned char*)filePath,data_to_encrypt,data_after_encrypt,aes,clnt_sock);
+        // sendFile(fp,fsize,path,data_to_encrypt,data_after_encrypt,&AESEncryptKey,clnt_sock);
+    fclose(fp);
     //RSA_free(ClientRSA);
     //RSA_free(EncryptRsa);
     close(serv_sock);

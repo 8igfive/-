@@ -4,16 +4,26 @@
 #include "rsa.h"
 #include <ctime>
 #include "../aes/AES.h"
-int main()
+#include <string>
+#include <iostream>
+using namespace std;
+int main(int argc,char* argv[])
 {
+	if(argc!=3){
+		cout<<"argc:"<<argc<<endl;
+		return -1;
+	}
+	char* ipAddr = argv[1];
+	int portNum = atoi(argv[2]);
+	cout<<"ipAddr:"<<ipAddr<<",portNum:"<<portNum<<endl;
     //get socket
     int sock = socket(AF_INET, SOCK_STREAM, 0);
     //connect sender
     struct sockaddr_in serv_addr;
     memset(&serv_addr, 0, sizeof(serv_addr));
     serv_addr.sin_family = AF_INET;  //ipv4
-    serv_addr.sin_addr.s_addr = inet_addr("192.168.31.128");  //ip address
-    serv_addr.sin_port = htons(8000);  //port
+    serv_addr.sin_addr.s_addr = inet_addr(ipAddr);  //ip address
+    serv_addr.sin_port = htons(portNum);  //port
     int result=connect(sock, (struct sockaddr*)&serv_addr, sizeof(serv_addr));
     if(result==-1){
         printf("errno for connection is %d\n",errno);
@@ -88,13 +98,16 @@ int main()
     AES aes(aesSeed, 32);
     // AES_KEY AESDecryptKey;
     // AES_set_decrypt_key(aesSeed, 256, &AESDecryptKey);
-    while(1){
-        //receive data
-        printf("Wainting For File...\n");
-        memset(data_after_encrypt,0,sizeof(data_after_encrypt));
-        myRecvFile(data_after_encrypt,data_after_decrypt,aes,sock);
-        //recvFile(data_after_encrypt,data_after_decrypt,&AESDecryptKey,sock);
-    }
+    //while(1){
+    //    //receive data
+    //    printf("Wainting For File...\n");
+    //    memset(data_after_encrypt,0,sizeof(data_after_encrypt));
+    //    myRecvFile(data_after_encrypt,data_after_decrypt,aes,sock);
+    //    //recvFile(data_after_encrypt,data_after_decrypt,&AESDecryptKey,sock);
+    //}
+	printf("Wainting For File...\n");
+    memset(data_after_encrypt,0,sizeof(data_after_encrypt));
+    myRecvFile(data_after_encrypt,data_after_decrypt,aes,sock);
     //RSA_free(EncryptRsa);
     close(sock);
     return 0;
