@@ -13,6 +13,8 @@ sender.o:sender.cpp
 	$(CC) -c sender.cpp $(CFLAGS)
 rsa.o:rsa.cpp
 	$(CC) -c rsa.cpp $(CFLAGS)
+sha256.o:sha256.cpp
+	$(CC) -c sha256.cpp $(CFLAGS)
 
 $(AES_DIR)/%.o:$(AES_DIR)/%.cpp
 	$(CC) $(CFLAGS) -c $< -o $@

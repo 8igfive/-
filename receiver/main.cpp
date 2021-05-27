@@ -122,7 +122,6 @@ int main(int argc, char *argv[])
 	unsigned long fsize;
 	unsigned char *msg;
 	unsigned char digset[SHA256_MESSAGE_SIZE];
-	sha256_context ctx;
 	unsigned long sha_size;
 	int i;
 	FILE *fp;
@@ -169,7 +168,7 @@ int main(int argc, char *argv[])
 			fread(sha_gen, 1, 63, sha);
 			sha_rec[63] = '\0';
 			sha_gen[63] = '\0';
-			if (strcmp(sha_r, sha_s) != 0)
+			if (strcmp(sha_rec, sha_gen) != 0)
 			{
 				printf("\n SHA256 Check Failed\n");
 			}
