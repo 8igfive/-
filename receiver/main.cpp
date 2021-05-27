@@ -117,7 +117,6 @@ int main(int argc, char *argv[])
 	unsigned char data_after_encrypt[16];
 	unsigned char data_after_decrypt[16];
 
-	bool is_sha = true;
 	char fn[256];
 	unsigned long fsize;
 	unsigned char *msg;
@@ -137,11 +136,7 @@ int main(int argc, char *argv[])
 		memset(data_after_encrypt, 0, sizeof(data_after_encrypt));
 		memset(data_after_decrypt, 0, sizeof(data_after_decrypt));
 		myRecvFile(data_after_encrypt, data_after_decrypt, aes, sock, fn);
-		if (is_sha)
-		{
-			is_sha = false;
-		}
-		else
+
 		{
 			fp = fopen((const char *)fn, "r");
 			fseek(fp, SEEK_SET, SEEK_END);
@@ -170,14 +165,20 @@ int main(int argc, char *argv[])
 			sha_gen[63] = '\0';
 			if (strcmp(sha_rec, sha_gen) != 0)
 			{
+				printf("sha_rec:%s\n",sha_rec);
+				printf("sha_gen:%s\n",sha_gen);
 				printf("\n SHA256 Check Failed\n");
 			}
 			else
 			{
 				printf("\n SHA256 Check Success\n");
 			}
-			is_sha = true;
-		}
+		}		
+		printf("Wainting For File...\n");
+		memset(data_after_encrypt, 0, sizeof(data_after_encrypt));
+		memset(data_after_decrypt, 0, sizeof(data_after_decrypt));
+		myRecvFile(data_after_encrypt, data_after_decrypt, aes, sock, fn);
+		
 		close(sock);
 		//close(serv_sock);
 		//serv_sock=getServerSocket(ipAddr,portNum);

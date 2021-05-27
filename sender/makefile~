@@ -1,13 +1,22 @@
 CC = g++
-CFLAGS = -lssl -lcrypto -lgmp
+CFLAGS = -lssl -lcrypto -lgmp -std=c++11
 
-rec:main.o receiver.o
-	$(CC) -o send main.o sender.o rsa.o $(CFLAGS)
+AES_DIR = ../aes
+AES_SRC = $(wildcard $(AES_DIR)/*.cpp)
+AES_OBJ = $(patsubst $(AES_DIR)/%.cpp,$(AES_DIR)/%.o,$(AES_SRC))
+
+send:main.o sender.o rsa.o sha256.o $(AES_OBJ)
+	$(CC) -o send main.o sender.o rsa.o $(AES_OBJ) $(CFLAGS)
 main.o:main.cpp
 	$(CC) -c main.cpp $(CFLAGS)
-receiver.o:sender.cpp
+sender.o:sender.cpp
 	$(CC) -c sender.cpp $(CFLAGS)
 rsa.o:rsa.cpp
 	$(CC) -c rsa.cpp $(CFLAGS)
+sha256.o:sha256.cpp
+	$(CC) -c sha256.cpp $(CFLAGS)
+
+$(AES_DIR)/%.o:$(AES_DIR)/%.cpp
+	$(CC) $(CFLAGS) -c $< -o $@
 clean:
-	rm rec main.o sender.o rsa.o
+	rm send main.o sender.o rsa.o sha256.o

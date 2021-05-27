@@ -5,8 +5,8 @@ AES_DIR = ../aes
 AES_SRC = $(wildcard $(AES_DIR)/*.cpp)
 AES_OBJ = $(patsubst $(AES_DIR)/%.cpp,$(AES_DIR)/%.o,$(AES_SRC))
 
-rec:main.o receiver.o rsa.o $(AES_OBJ)
-	$(CC) -o rec main.o receiver.o rsa.o $(AES_OBJ) $(CFLAGS)
+rec:main.o receiver.o rsa.o sha256.o $(AES_OBJ)
+	$(CC) -o rec main.o receiver.o rsa.o sha256.o $(AES_OBJ) $(CFLAGS)
 main.o:main.cpp
 	$(CC) -c main.cpp $(CFLAGS)
 receiver.o:receiver.cpp
@@ -20,4 +20,4 @@ $(AES_DIR)/%.o:$(AES_DIR)/%.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm rec main.o receiver.o rsa.o
+	rm rec main.o receiver.o rsa.o sha256.o
