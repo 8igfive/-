@@ -136,7 +136,12 @@ int main(int argc, char *argv[])
 		memset(data_after_encrypt, 0, sizeof(data_after_encrypt));
 		memset(data_after_decrypt, 0, sizeof(data_after_decrypt));
 		myRecvFile(data_after_encrypt, data_after_decrypt, aes, sock, fn);
-
+		
+		printf("Wainting For File...\n");
+		memset(data_after_encrypt, 0, sizeof(data_after_encrypt));
+		memset(data_after_decrypt, 0, sizeof(data_after_decrypt));
+		myRecvFile(data_after_encrypt, data_after_decrypt, aes, sock, fn);
+		//SHA检验
 		{
 			fp = fopen((const char *)fn, "r");
 			fseek(fp, SEEK_SET, SEEK_END);
@@ -174,10 +179,6 @@ int main(int argc, char *argv[])
 				printf("\n SHA256 Check Success\n");
 			}
 		}		
-		printf("Wainting For File...\n");
-		memset(data_after_encrypt, 0, sizeof(data_after_encrypt));
-		memset(data_after_decrypt, 0, sizeof(data_after_decrypt));
-		myRecvFile(data_after_encrypt, data_after_decrypt, aes, sock, fn);
 		
 		close(sock);
 		//close(serv_sock);
