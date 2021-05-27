@@ -22,4 +22,7 @@ int recvPKeyAndLen(unsigned char *b_f, int32_t *pk_len,int sock);
 int genSeed(unsigned char* ranstr);
 int recvFile(unsigned char *data_after_encrypt,unsigned char *data_after_decrypt,AES_KEY *AESDecryptKey,int sock);
 int myRecvFile(unsigned char *data_after_encrypt,unsigned char *data_after_decrypt,AES& aes,int sock);
+int getServerSocket(const char *ip,int port);
+//waiting for connection from receiver.
+int waitForConnection(int serv_sock);
 #endif // RECEIVER_H_INCLUDED

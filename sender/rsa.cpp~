@@ -40,14 +40,18 @@ void RSA_gen_keys(struct public_key* pub,struct private_key* priv)
 
 	mpz_t e;
 	mpz_init_set_ui(e,65537);
+	mpz_init(pub->modulus);
+	mpz_init(pub->exponent);
     mpz_set(pub->modulus,n);
     mpz_set(pub->exponent,e);
 
 	mpz_t d;
 	mpz_init(d);
 	mpz_invert(d,e,phi);
+	mpz_init(priv->modulus);
+	mpz_init(priv->exponent);
     mpz_set(priv->modulus,n);
-    mpz_set(priv->exponent,d)
+    mpz_set(priv->exponent,d);
 }
 //加密
 void RSA_encrypt(mpz_t outseed,mpz_t seed,const struct public_key* pub){
@@ -55,6 +59,10 @@ void RSA_encrypt(mpz_t outseed,mpz_t seed,const struct public_key* pub){
     mpz_init(C);
     mpz_powm(C,seed,pub->exponent,pub->modulus);
 	mpz_set(outseed,C);
+	gmp_printf("M=====>\n%ZX\n",seed);
+	gmp_printf("e=====>\n%ZX\n",pub->exponent);
+	gmp_printf("n=====>\n%ZX\n",pub->modulus);
+	gmp_printf("C=====>\n%ZX\n",outseed);
 }
 //解密
 void RSA_decrypt(mpz_t outseed,mpz_t seed,const struct private_key* priv) {
@@ -62,4 +70,8 @@ void RSA_decrypt(mpz_t outseed,mpz_t seed,const struct private_key* priv) {
     mpz_init(M);
     mpz_powm(M,seed,priv->exponent,priv->modulus);
 	mpz_set(outseed,M);
+	gmp_printf("C=====>\n%ZX\n",seed);
+	gmp_printf("d=====>\n%ZX\n",priv->exponent);
+	gmp_printf("n=====>\n%ZX\n",priv->modulus);
+	gmp_printf("M=====>\n%ZX\n",outseed);
 }
