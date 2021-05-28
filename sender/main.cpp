@@ -46,7 +46,7 @@ void genSeed(int clnt_sock, mpz_t outseed)
 }
 int main(int argc, char *argv[])
 {
-    //argv[0]:ip  argv[1]:port  argv[2]:filepath
+    //argv[1]:ip  argv[2]:port  argv[3]:filepath
     if (argc != 4)
     {
         cout << "argc:" << argc << endl;
