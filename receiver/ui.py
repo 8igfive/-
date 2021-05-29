@@ -6,30 +6,38 @@ from subprocess import Popen,PIPE
 os.system("make")
 root=tk.Tk()
 root.geometry('800x600')
-root.wm_title("发送端")
+root['background'] = 'white'
+root.wm_title("接收端")
+
+CURRENT_PATH = os.path.dirname(__file__)
+
+# bg_img = tk.PhotoImage(file=os.path.join(CURRENT_PATH, '..', 'images', 'bg_1.png'))
+# bg_label = tk.Label(root, image=bg_img)
+# bg_label.pack()
+
 #IP地址
-ipLabel=tk.Label(root,text="IP:")
-ipLabel.place(x=20,y=30,width=100,height=40)
+ipLabel=tk.Label(root,text="IP:", bg='white')
+ipLabel.place(x=80,y=60,width=100,height=40)
 ipAddr=tk.StringVar()
-ipEntry=tk.Entry(root,textvariable=ipAddr)
+ipEntry=tk.Entry(root,textvariable=ipAddr, relief='flat')
 ipAddr.set('192.168.31.128')
-ipEntry.place(x=120,y=30,width=400,height=40)
+ipEntry.place(x=150,y=60,width=200,height=40)	
 #端口
-portLabel=tk.Label(root,text="端口:")
-portLabel.place(x=20,y=90,width=100,height=40)
+portLabel=tk.Label(root,text="端口:", bg='white')
+portLabel.place(x=400,y=60,width=100,height=40)
 portNum=tk.StringVar()
-portEntry=tk.Entry(root,textvariable=portNum)
+portEntry=tk.Entry(root,textvariable=portNum, relief='flat')
 portNum.set('8888')
-portEntry.place(x=120,y=90,width=400,height=40)
+portEntry.place(x=470,y=60,width=200,height=40)
 #文件地址
 filePath=tk.StringVar()
 #filePath.set('aaa')
 #文件列表
-snd_list=tk.Listbox(root)
-sb=tk.Scrollbar(snd_list)
+snd_list=tk.Listbox(root, relief='flat')
+sb=tk.Scrollbar(snd_list, relief='groove')
 sb.pack(side=tk.RIGHT,fill=tk.Y)
 snd_list['yscrollcommand']=sb.set
-snd_list.place(x=120,y=240,height=200,width=400)
+snd_list.place(x=180,y=270,height=200,width=440)
 sb.config(command=snd_list.yview)
 #rt不要和root重名了
 def checkFile():
@@ -57,13 +65,13 @@ def deletFile(obj):
         obj.delete(tk.ACTIVE)
 
 #删除文件按钮
-delFileBtn=tk.Button(root,text='删除',command=lambda x=snd_list:deletFile(x))
-delFileBtn.place(x=600,y=250,width=100,height=40)
+delFileBtn=tk.Button(root,text='删除',command=lambda x=snd_list:deletFile(x), relief='flat', bg='#FFFFFF')
+delFileBtn.place(x=180,y=500,width=100,height=40)
 #文件打开按钮
-openFileBtn=tk.Button(root,text='打开',command=lambda x=snd_list:openFile(x.get(tk.ACTIVE)))
-openFileBtn.place(x=600,y=350,width=100,height=40)
+openFileBtn=tk.Button(root,text='打开',command=lambda x=snd_list:openFile(x.get(tk.ACTIVE)), relief='flat', bg='#FFFFFF')
+openFileBtn.place(x=520,y=500,width=100,height=40)
 #监听
-sndBtn=tk.Button(root,text='开始监听')
+sndBtn=tk.Button(root,text='开始监听', relief='flat', bg='#FFFFFF')
 th=None
 def execute():
     global p
@@ -76,11 +84,11 @@ def out():
     os.system("rm seed.txt")
     root.destroy()
 sndBtn['command']=execute
-sndBtn.place(x=120,y=500,width=100,height=40)
+sndBtn.place(x=180,y=170,width=100,height=40)
 
 #退出按钮
-quBtn=tk.Button(root,text='退出',command=out)
-quBtn.place(x=400,y=500,width=100,height=40)
+quBtn=tk.Button(root,text='退出',command=out, relief='flat', bg='#FFFFFF')
+quBtn.place(x=520,y=170,width=100,height=40)
 
 th2=threading.Thread(target=checkFile)  
 th2.setDaemon(True)#守护线程  

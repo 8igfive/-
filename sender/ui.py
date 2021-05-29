@@ -11,35 +11,36 @@ from subprocess import Popen,PIPE
 os.system("make")
 root=tk.Tk()
 root.geometry('800x600')
+root['background'] = 'white'
 root.wm_title("发送端")
 #IP地址
-ipLabel=tk.Label(root,text="IP:")
-ipLabel.place(x=20,y=30,width=100,height=40)
+ipLabel=tk.Label(root,text="IP:", bg='white')
+ipLabel.place(x=80,y=60,width=100,height=40)
 ipAddr=tk.StringVar()
-ipEntry=tk.Entry(root,textvariable=ipAddr)
+ipEntry=tk.Entry(root,textvariable=ipAddr, relief='flat')
 ipAddr.set('192.168.31.128')
-ipEntry.place(x=120,y=30,width=400,height=40)
+ipEntry.place(x=150,y=60,width=200,height=40)
 #端口
-portLabel=tk.Label(root,text="端口:")
-portLabel.place(x=20,y=90,width=100,height=40)
+portLabel=tk.Label(root,text="端口:", bg='white')
+portLabel.place(x=400,y=60,width=100,height=40)
 portNum=tk.StringVar()
-portEntry=tk.Entry(root,textvariable=portNum)
+portEntry=tk.Entry(root,textvariable=portNum, relief='flat')
 portNum.set('8888')
-portEntry.place(x=120,y=90,width=400,height=40)
+portEntry.place(x=470,y=60,width=200,height=40)
 #文件列表
-snd_list=tk.Listbox(root)
+snd_list=tk.Listbox(root, relief='flat')
 sb=tk.Scrollbar(snd_list)
 sb.pack(side=tk.RIGHT,fill=tk.Y)
 snd_list['yscrollcommand']=sb.set
-snd_list.place(x=120,y=240,height=200,width=400)
+snd_list.place(x=180,y=270,height=200,width=440)
 sb.config(command=snd_list.yview)
 #文件地址
-fileLabel=tk.Label(root,text="文件地址:")
-fileLabel.place(x=20,y=150,width=100,height=40)
+fileLabel=tk.Label(root,text="文件地址:", bg='white')
+fileLabel.place(x=160,y=200,width=100,height=40)
 filePath=tk.StringVar()
-fileEntry=tk.Entry(root,textvariable=filePath)
+fileEntry=tk.Entry(root,textvariable=filePath, relief='flat')
 filePath.set('')
-fileEntry.place(x=120,y=150,width=400,height=40)
+fileEntry.place(x=250,y=200,width=230,height=40)
 #添加文件
 def addFile():
     global filePath
@@ -72,18 +73,18 @@ def out():
 
 
 #添加文件按钮
-addFileBtn=tk.Button(root,text='添加',command=addFile)
-addFileBtn.place(x=600,y=150,width=100,height=40)
+addFileBtn=tk.Button(root,text='添加',command=addFile, relief='flat', bg='white')
+addFileBtn.place(x=520,y=200,width=100,height=40)
 #删除文件按钮
-delFileBtn=tk.Button(root,text='删除',command=lambda x=snd_list:x.delete(tk.ACTIVE))
-delFileBtn.place(x=600,y=250,width=100,height=40)
+delFileBtn=tk.Button(root,text='删除',command=lambda x=snd_list:x.delete(tk.ACTIVE), relief='flat', bg='white')
+delFileBtn.place(x=180,y=500,width=100,height=40)
 #文件打开按钮
-openFileBtn=tk.Button(root,text='打开',command=lambda x=snd_list:openFile(x.get(tk.ACTIVE)))
-openFileBtn.place(x=600,y=350,width=100,height=40)
+openFileBtn=tk.Button(root,text='打开',command=lambda x=snd_list:openFile(x.get(tk.ACTIVE)), relief='flat', bg='white')
+openFileBtn.place(x=520,y=500,width=100,height=40)
 #发送文件按钮
-sndBtn=tk.Button(root,text='发送',command=send)
-sndBtn.place(x=120,y=500,width=100,height=40)
+sndBtn=tk.Button(root,text='发送',command=send, relief='flat', bg='white')
+sndBtn.place(x=180,y=140,width=100,height=40)
 #退出按钮
-quBtn=tk.Button(root,text='退出',command=out)
-quBtn.place(x=400,y=500,width=100,height=40)
+quBtn=tk.Button(root,text='退出',command=out, relief='flat', bg='white')
+quBtn.place(x=520,y=140,width=100,height=40)
 root.mainloop()
